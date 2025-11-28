@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Validar cuenta · CryptoVision{% endblock %}
+
+{% block content %}
+<section class="section" style="max-width:480px;margin:auto;">
+  <h1>Validar cuenta</h1>
+  <p>Ingresá el código de validación que recibiste por correo.</p>
+
+  <form method="post" class="cv-form">
+    {% csrf_token %}
+    {{ form.email }}  {# hidden #}
+
+    <div class="form-row">
+      <label for="{{ form.codigo.id_for_label }}">Código de validación</label>
+      {{ form.codigo }}
+      {{ form.codigo.errors }}
+    </div>
+
+    <button type="submit" class="btn" style="margin-top:10px;">Validar cuenta</button>
+  </form>
+</section>
+{% endblock %}

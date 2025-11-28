@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Contacto · CryptoVision{% endblock %}
+
+{% block content %}
+<section class="section" style="max-width:720px;margin:auto;">
+  <h1>Contacto</h1>
+  <p>Dejanos tus datos y te asesoramos a medida.</p>
+
+  <!-- Bloque de errores de JS -->
+  <div id="js-errors" style="display:none; margin-bottom:10px; border:1px solid #ff6b6b; padding:10px; border-radius:4px; background:#ffecec; color:#b00020;">
+    <strong>Revisá estos campos:</strong>
+    <ul id="js-errors-list" style="margin:5px 0 0 18px; padding:0;"></ul>
+  </div>
+
+  <form id="contact-form" method="post" novalidate class="cv-form">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <div class="form-row">
+      <label for="{{ form.nombre.id_for_label }}">Nombre completo</label>
+      {{ form.nombre }}
+      {{ form.nombre.errors }}
+    </div>
+
+    <div class="form-row">
+      <label for "{{ form.email.id_for_label }}">Email</label>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+
+    <div class="form-row">
+      <label for="{{ form.asunto.id_for_label }}">Asunto</label>
+      {{ form.asunto }}
+      {{ form.asunto.errors }}
+    </div>
+
+    <div class="form-row">
+      <label for="{{ form.mensaje.id_for_label }}">Mensaje</label>
+      {{ form.mensaje }}
+      {{ form.mensaje.errors }}
+    </div>
+
+    <div class="form-check" style="margin-top:10px;">
+      {{ form.acepta }}
+      <label for="{{ form.acepta.id_for_label }}">Acepto la política de privacidad</label>
+      {{ form.acepta.errors }}
+    </div>
+
+    <button type="submit" class="btn" style="margin-top:10px;">Enviar</button>
+  </form>
+</section>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("contact-form");
+  if (!form) return;
+
+  form.addEventListener("submit", function (event) {
+    const errores = [];
+
+    const nombre = form.elements["nombre"];
+    const email = form.elements["email"];
+    const asunto = form.elements["asunto"];
+    const mensaje = form.elements["mensaje"];
+    const acepta = form.elements["acepta"];
+
+    if (!nombre.value.trim()) {
+      errores.push("El nombre es obligatorio.");
+    }
+
+    if (!email.value.trim()) {
+      errores.push("El email es obligatorio.");
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.value.trim())) {
+        errores.push("El email no tiene un formato válido.");
+      }
+    }
+
+    if (!asunto.value.trim()) {
+      errores.push("El asunto es obligatorio.");
+    }
+
+    if (!mensaje.value.trim()) {
+      errores.push("El mensaje es obligatorio.");
+    } else if (mensaje.value.trim().length < 10) {
+      errores.push("El mensaje debe tener al menos 10 caracteres.");
+    }
+
+    if (!acepta.checked) {
+      errores.push("Debés aceptar la política de privacidad para continuar.");
+    }
+
+    if (errores.length > 0) {
+      event.preventDefault(); 
+
+      const box = document.getElementById("js-errors");
+      const list = document.getElementById("js-errors-list");
+
+      list.innerHTML = "";
+      errores.forEach(function (err) {
+        const li = document.createElement("li");
+        li.textContent = err;
+        list.appendChild(li);
+      });
+
+      box.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+});
+</script>
+{% endblock %}

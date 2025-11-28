@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Inicio · CryptoVision{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__text">
+      <h1>
+        CRYPTO<span class="brand">VISION</span>
+      </h1>
+      <p class="lead">
+        Plataforma simple y segura para operar criptoactivos. <br>
+        Asesoramiento, compra-venta y billeteras digitales en un solo lugar.
+      </p>
+
+      <div class="actions">
+        <a href="{% url 'services' %}" class="btn">Ver servicios</a>
+        <a href="{% url 'contact' %}" class="btn btn--ghost">Contactanos</a>
+      </div>
+
+      <ul class="badges">
+        <li class="badge">Seguro</li>
+        <li class="badge">24/7</li>
+        <li class="badge">Sin comisiones ocultas</li>
+      </ul>
+    </div>
+
+    <!-- Imagen principal -->
+    <div class="hero__image">
+      <img src="{% static 'img/inicio.png' %}" alt="CryptoVision Futurista">
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <h2 class="section__title">Lo que hacemos</h2>
+
+    <div class="grid">
+      <article class="card">
+        <div class="card__icon">💡</div>
+        <h3 class="card__title">Asesoramiento</h3>
+        <p class="card__text">Te guiamos para invertir mejor según tu perfil y objetivos.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__icon">💱</div>
+        <h3 class="card__title">Compra-venta</h3>
+        <p class="card__text">Operá criptomonedas de forma rápida y transparente.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__icon">📲</div>
+        <h3 class="card__title">Billeteras</h3>
+        <p class="card__text">Custodia y gestión de activos con estándares de seguridad.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>¿Listx para empezar?</h2>
+    <p>Hablemos y armamos un plan a tu medida.</p>
+    <a href="{% url 'contact' %}" class="btn">Agendar consulta</a>
+  </section>
+
+{% endblock %}
+
+

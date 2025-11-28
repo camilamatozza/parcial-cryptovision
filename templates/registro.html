@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Registro · CryptoVision{% endblock %}
+
+{% block content %}
+<section class="section" style="max-width:720px;margin:auto;">
+  <h1>Crear cuenta</h1>
+  <p>Este sitio es de acceso restringido. Usá el email habilitado y tu código de validación.</p>
+
+  <form method="post" novalidate class="cv-form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="form-row">
+      <label for="{{ form.nombre.id_for_label }}">Nombre completo</label>
+      {{ form.nombre }}
+      {{ form.nombre.errors }}
+    </div>
+
+    <div class="form-row">
+      <label for="{{ form.email.id_for_label }}">Email</label>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+
+    <div class="form-row">
+      <label for="{{ form.password1.id_for_label }}">Contraseña</label>
+      {{ form.password1 }}
+      {{ form.password1.errors }}
+    </div>
+
+    <div class="form-row">
+      <label for="{{ form.password2.id_for_label }}">Confirmar contraseña</label>
+      {{ form.password2 }}
+      {{ form.password2.errors }}
+    </div>
+
+    <div class="form-row">
+      <label for="{{ form.codigo.id_for_label }}">Código de validación</label>
+      {{ form.codigo }}
+      {{ form.codigo.errors }}
+    </div>
+
+    <button type="submit" class="btn" style="margin-top:10px;">Registrarme</button>
+  </form>
+
+  <p style="margin-top:15px;">
+    ¿Ya tenés cuenta?
+    <a href="{% url 'login' %}">Iniciá sesión acá</a>.
+  </p>
+</section>
+{% endblock %}

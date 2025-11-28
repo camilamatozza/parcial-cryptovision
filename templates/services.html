@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Servicios · CryptoVision{% endblock %}
+
+{% block content %}
+
+<section class="section">
+  <h1 class="section__title">Nuestros Servicios</h1>
+
+  <div class="grid">
+    <article class="card">
+      <div class="card__icon">💡</div>
+      <h3 class="card__title">Asesoramiento</h3>
+      <p class="card__text">
+        Planes a medida según tu perfil de riesgo. Portfolio, rebalanceo y estrategia de entrada/salida.
+      </p>
+    </article>
+
+    <article class="card">
+      <div class="card__icon">💱</div>
+      <h3 class="card__title">Compra / Venta</h3>
+      <p class="card__text">
+        Operaciones seguras, cotización transparente y acompañamiento durante todo el proceso.
+      </p>
+    </article>
+
+    <article class="card">
+      <div class="card__icon">📲</div>
+      <h3 class="card__title">Billeteras Digitales</h3>
+      <p class="card__text">
+        Onboarding, configuración de wallets y buenas prácticas de seguridad (seed phrase y 2FA).
+      </p>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section__title">¿Por qué elegirnos?</h2>
+  <div class="grid">
+    <article class="card">
+      <div class="card__icon">🔐</div>
+      <h3 class="card__title">Seguridad</h3>
+      <p class="card__text">Procedimientos y estándares de la industria para proteger tus activos.</p>
+    </article>
+
+    <article class="card">
+      <div class="card__icon">📈</div>
+      <h3 class="card__title">Transparencia</h3>
+      <p class="card__text">Sin comisiones ocultas. Reportes y seguimiento de tus operaciones.</p>
+    </article>
+
+    <article class="card">
+      <div class="card__icon">⚡</div>
+      <h3 class="card__title">Acompañamiento</h3>
+      <p class="card__text">Soporte cercano, lenguaje claro y educación financiera continua.</p>
+    </article>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>¿Listx para empezar?</h2>
+  <p>Escribinos y armamos tu plan personalizado.</p>
+  <a href="{% url 'contacto' %}" class="btn">Quiero asesoramiento</a>
+</section>
+
+{% endblock %}

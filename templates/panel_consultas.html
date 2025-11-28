@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Panel de consultas · CryptoVision{% endblock %}
+
+{% block content %}
+<section class="section" style="max-width:1000px;margin:auto;">
+  <h1>Panel de consultas</h1>
+  <p>Resumen de las consultas recibidas desde el sitio.</p>
+
+  
+  <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:15px; margin-bottom:25px;">
+    <div style="flex:1 1 220px; padding:15px; border-radius:8px; border:1px solid #ddd;">
+      <h2 style="margin-top:0; font-size:18px;">Total de consultas</h2>
+      <p style="font-size:32px; font-weight:bold; margin:0;">{{ total }}</p>
+    </div>
+
+    <div style="flex:2 1 320px; padding:15px; border-radius:8px; border:1px solid #ddd;">
+      <h2 style="margin-top:0; font-size:18px;">Por categoría</h2>
+      {% if por_categoria %}
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+          <thead>
+            <tr>
+              <th style="text-align:left; border-bottom:1px solid #ccc; padding:6px;">Categoría</th>
+              <th style="text-align:right; border-bottom:1px solid #ccc; padding:6px;">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for item in por_categoria %}
+            <tr>
+              <td style="padding:6px;">
+                {% if item.categoria == "COMERCIAL" %}Consulta Comercial{% endif %}
+                {% if item.categoria == "TECNICA" %}Consulta Técnica{% endif %}
+                {% if item.categoria == "RRHH" %}Consulta de RRHH{% endif %}
+                {% if item.categoria == "GENERAL" %}Consulta General{% endif %}
+              </td>
+              <td style="padding:6px; text-align:right;">{{ item.cantidad }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>Todavía no hay consultas registradas.</p>
+      {% endif %}
+    </div>
+  </div>
+
+ 
+  <h2 style="margin-top:10px;">Detalle de consultas</h2>
+
+  {% if consultas %}
+    <div style="overflow-x:auto; margin-top:10px;">
+      <table style="width:100%; border-collapse:collapse; font-size:14px;">
+        <thead>
+          <tr>
+            <th style="text-align:left; border-bottom:2px solid #ccc; padding:8px;">Fecha</th>
+            <th style="text-align:left; border-bottom:2px solid #ccc; padding:8px;">Nombre</th>
+            <th style="text-align:left; border-bottom:2px solid #ccc; padding:8px;">Email</th>
+            <th style="text-align:left; border-bottom:2px solid #ccc; padding:8px;">Asunto</th>
+            <th style="text-align:left; border-bottom:2px solid #ccc; padding:8px;">Categoría</th>
+            <th style="text-align:left; border-bottom:2px solid #ccc; padding:8px;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for c in consultas %}
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid #eee;">
+              {{ c.fecha|date:"d/m/Y H:i" }}
+            </td>
+            <td style="padding:8px; border-bottom:1px solid #eee;">
+              {{ c.nombre }}
+            </td>
+            <td style="padding:8px; border-bottom:1px solid #eee;">
+              {{ c.email }}
+            </td>
+            <td style="padding:8px; border-bottom:1px solid #eee;">
+              {{ c.asunto }}
+            </td>
+            <td style="padding:8px; border-bottom:1px solid #eee;">
+              {% if c.categoria == "COMERCIAL" %}Consulta Comercial{% endif %}
+              {% if c.categoria == "TECNICA" %}Consulta Técnica{% endif %}
+              {% if c.categoria == "RRHH" %}Consulta de RRHH{% endif %}
+              {% if c.categoria == "GENERAL" %}Consulta General{% endif %}
+            </td>
+            <td style="padding:8px; border-bottom:1px solid #eee;">
+              
+              <a href="/admin/web/consulta/{{ c.id }}/change/" target="_blank">
+                Ver / editar
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>No hay consultas cargadas aún.</p>
+  {% endif %}
+</section>
+{% endblock %}
