@@ -8,9 +8,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-8vfhgxzffg)zz=hdl4c7f0)nlqwbwxt-24+^4=y8(3o09un08x'
 
-DEBUG = True
+
+DEBUG = os.environ.get("RENDER") is None
 
 ALLOWED_HOSTS = []
+
 
 
 
@@ -118,7 +120,6 @@ EMAIL_HOST_PASSWORD = "Camila2025/"
 LOGIN_URL = "login"                    
 LOGIN_REDIRECT_URL = "panel_consultas" 
 LOGOUT_REDIRECT_URL = "index"          
-import os
 
 if "RENDER" in os.environ:
     ALLOWED_HOSTS = ["*"]
