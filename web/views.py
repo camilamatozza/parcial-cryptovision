@@ -13,6 +13,16 @@ from .utils import clasificar_categoria
 from .forms import ConsultaForm, RegistroForm, ValidacionCuentaForm
 
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import ConsultaSerializer
+from django.contrib.auth import logout
+from django.shortcuts import redirect, render
+
+
+import requests
+
+
 def index(request):
     return render(request, "index.html")
 
@@ -47,17 +57,20 @@ Mensaje:
 Categoría asignada: {consulta.categoria}
 """
 
-            
             try:
                 send_mail(
                     subject=asunto_mail,
                     message=cuerpo_mail,
                     from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[consulta.email],
+                    recipient_list=[consulta.email],  
                     fail_silently=False,
                 )
-            except Exception as e:
-                print("⚠ Error al enviar correo de contacto:", e)
+            except Exception:
+                
+                messages.warning(
+                    request,
+                    "Tu consulta se guardó correctamente, pero hubo un problema enviando el correo de confirmación.",
+                )
 
             return redirect("contacto_ok")
     else:
@@ -95,13 +108,16 @@ def registro(request):
     if request.method == "POST":
         form = RegistroForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save()  
             email = user.email
 
+            
             permitido = UsuarioPermitido.objects.get(email=email)
 
-           
-            url_validar = request.build_absolute_uri(reverse("validar_cuenta")) + f"?email={email}"
+            
+            url_validar = request.build_absolute_uri(
+                reverse("validar_cuenta")
+            ) + f"?email={email}"
 
             cuerpo = f"""
 Hola {user.first_name},
@@ -116,7 +132,6 @@ Ingresá a este enlace y completá el código:
 Si vos no iniciaste este registro, podés ignorar este mensaje.
 """
 
-            
             try:
                 send_mail(
                     subject="Validación de cuenta - CryptoVision",
@@ -125,8 +140,11 @@ Si vos no iniciaste este registro, podés ignorar este mensaje.
                     recipient_list=[email],
                     fail_silently=False,
                 )
-            except Exception as e:
-                print("⚠ Error al enviar correo de validación:", e)
+            except Exception:
+                messages.warning(
+                    request,
+                    "Se creó el usuario, pero hubo un problema enviando el correo de validación.",
+                )
 
             return render(request, "registro_ok.html", {"email": email})
     else:
@@ -136,7 +154,7 @@ Si vos no iniciaste este registro, podés ignorar este mensaje.
 
 
 def validar_cuenta(request):
-
+    
     email_inicial = request.GET.get("email", "")
 
     if request.method == "POST":
@@ -169,3 +187,47 @@ def validar_cuenta(request):
         form = ValidacionCuentaForm(initial={"email": email_inicial})
 
     return render(request, "validar_cuenta.html", {"form": form})
+
+@api_view(["GET"])
+def api_consultas(request):
+    """
+    Devuelve todas las consultas en JSON.
+    URL: /api/consultas/
+    """
+    consultas = Consulta.objects.order_by("-fecha")
+    serializer = ConsultaSerializer(consultas, many=True)
+    return Response(serializer.data)
+
+
+def mercado(request):
+    """
+    Consume una API externa de criptomonedas y muestra
+    un pequeño tablero de precios.
+    """
+    monedas = []
+    error = None
+
+    url = "https://api.coingecko.com/api/v3/coins/markets"
+    params = {
+        "vs_currency": "usd",
+        "ids": "bitcoin,ethereum,cardano,solana",
+    }
+
+    try:
+        resp = requests.get(url, params=params, timeout=5)
+        resp.raise_for_status()
+        monedas = resp.json()
+    except Exception:
+        error = "No se pudo cargar la información del mercado en este momento."
+
+    contexto = {
+        "monedas": monedas,
+        "error": error,
+    }
+    return render(request, "mercado.html", contexto)
+
+
+def salir(request):
+  
+    logout(request)
+    return redirect("index")

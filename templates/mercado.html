@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Mercado cripto{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Mercado cripto en tiempo (casi) real</h1>
+  <p>Los precios se cargan desde una API externa usando JavaScript.</p>
+</section>
+
+<section class="panel">
+  <h2>Principales criptomonedas</h2>
+
+  <div id="estado-mercado" class="alerta info">
+    Cargando datos del mercado...
+  </div>
+
+  <table class="tabla-cripto">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Símbolo</th>
+        <th>Precio (USD)</th>
+        <th>Cambio 24hs</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-cripto-body">
+      <!-- Filas dinámicas -->
+    </tbody>
+  </table>
+</section>
+
+<script>
+  async function cargarMercado() {
+    const estado = document.getElementById("estado-mercado");
+    const cuerpo = document.getElementById("tabla-cripto-body");
+
+    estado.textContent = "Cargando datos del mercado...";
+
+    try {
+      const resp = await fetch(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&page=1&sparkline=false"
+      );
+
+      if (!resp.ok) {
+        throw new Error("Error al llamar a la API externa");
+      }
+
+      const datos = await resp.json();
+      cuerpo.innerHTML = "";
+
+      datos.forEach((moneda) => {
+        const fila = document.createElement("tr");
+
+        const cambio = moneda.price_change_percentage_24h;
+        const cambioTexto = cambio !== null ? cambio.toFixed(2) + "%" : "-";
+
+        fila.innerHTML = `
+          <td>${moneda.name}</td>
+          <td>${moneda.symbol.toUpperCase()}</td>
+          <td>US$ ${moneda.current_price.toLocaleString()}</td>
+          <td class="${cambio >= 0 ? "positivo" : "negativo"}">${cambioTexto}</td>
+        `;
+
+        cuerpo.appendChild(fila);
+      });
+
+      estado.textContent = "Datos obtenidos desde la API de CoinGecko.";
+    } catch (error) {
+      console.error(error);
+      estado.textContent = "No se pudo cargar el mercado cripto. Intentá nuevamente más tarde.";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", cargarMercado);
+</script>
+{% endblock %}

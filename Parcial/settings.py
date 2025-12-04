@@ -1,9 +1,7 @@
-"""
-Django settings for Parcial project.
-"""
-
 from pathlib import Path
 import os
+import dj_database_url
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -61,12 +59,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Parcial.wsgi.application'
 
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        ssl_require=False,  
+    )
 }
 
 
@@ -118,3 +116,7 @@ EMAIL_HOST_PASSWORD = "Camila2025/"
 LOGIN_URL = "login"                    
 LOGIN_REDIRECT_URL = "panel_consultas" 
 LOGOUT_REDIRECT_URL = "index"          
+import os
+
+if "RENDER" in os.environ:
+    ALLOWED_HOSTS = ["*"]
