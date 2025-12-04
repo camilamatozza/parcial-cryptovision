@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{% block title %}CryptoVision{% endblock %}</title>
 
-  <!-- 🔹 Tipografías oficiales -->
+  
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- 🔹 CSS global -->
+  
   <link rel="stylesheet" href="{% static 'css/global.css' %}">
   {% block extra_css %}{% endblock %}
 </head>
@@ -17,7 +17,7 @@
 <body class="cv-body">
   {% include 'header.html' %}
 
-  <!-- 🔹 Bloque de mensajes -->
+  
   {% if messages %}
     <div class="cv-container" style="margin-top:14px;">
       {% for message in messages %}
