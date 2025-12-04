@@ -84,8 +84,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
@@ -95,10 +93,11 @@ USE_TZ = True
 
 
 STATIC_URL = "/static/"
-
 STATICFILES_DIRS = [
-    BASE_DIR / "Parcial" / "static",
+    Path(__file__).resolve().parent.parent / "static",
 ]
+
+
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
